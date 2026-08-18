@@ -2,33 +2,34 @@
 
 This is the backend server responsible for securely serving the model decryption key to authorized `maskd` client containers.
 
-## Security Architecture
+## Features
+- **Admin Panel**: Manage authorized License/API Keys via a Web UI (built with Flask-Admin).
+- **PostgreSQL Database**: Persistent storage for license keys.
+- **HMAC Request Signing**: Requests are signed using a hidden `APP_SECRET` embedded in the client binary.
+- **Anti-Replay Protection**: Validates timestamps to prevent request replay attacks.
 
-To prevent unauthorized access to the models, this server uses:
-1. **License Validation:** Clients must provide a valid `X-License-Key` header.
-2. **HMAC Request Signing:** Requests are signed using a hidden `APP_SECRET` embedded in the client binary.
-3. **Anti-Replay Protection:** The signed payload includes a timestamp (`X-Timestamp`) which is validated to ensure requests are not older than 30 seconds.
+## Running with Docker Compose (Recommended)
 
-## Local Development
-
-```bash
-# Install dependencies
-pip install -r requirements.txt
-
-# Set environment variables
-export APP_SECRET="your-super-secret-app-secret"
-export MODEL_DECRYPTION_KEY_B64="MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY="
-
-# Run the server
-flask --app app.main run --port 5000
-```
-
-## Docker Deployment
+To start the Key Server and the PostgreSQL database:
 
 ```bash
-docker build -t maskd-key-server .
-docker run -p 5000:5000 \
-    -e APP_SECRET="your-super-secret-app-secret" \
-    -e MODEL_DECRYPTION_KEY_B64="MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=" \
-    maskd-key-server
+docker-compose up -d --build
 ```
+
+### Accessing the Admin Panel
+1. Navigate to: `http://localhost:5000/admin`
+2. Login with credentials:
+   - Username: `admin` (or whatever `ADMIN_USERNAME` is set to in `.env/docker-compose.yml`)
+   - Password: `admin123` (or whatever `ADMIN_PASSWORD` is set to in `.env/docker-compose.yml`)
+3. Create a new API Key (License Key). Provide this key to your client.
+
+## Environment Variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `DATABASE_URL` | `postgresql://maskd_user:maskd_pass@db:5432/maskd_keys` | PostgreSQL connection URI |
+| `ADMIN_USERNAME` | `admin` | Admin panel login username |
+| `ADMIN_PASSWORD` | `admin123` | Admin panel login password |
+| `APP_SECRET` | `default-dev-app-secret-do-not-use-in-prod` | Secret used by client to sign requests. Must match `maskd` binary. |
+| `MODEL_DECRYPTION_KEY_B64` | `MDEyMz...` | Actual AES key used to decrypt the models (base64 encoded). |
+
