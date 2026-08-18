@@ -1,0 +1,39 @@
+[tool.poetry]
+name = "maskd-key-server"
+version = "1.0.0"
+description = "Backend Key Server for Maskd model security"
+authors = []
+readme = "README.md"
+packages = [{ include = "app" }]
+
+[tool.poetry.dependencies]
+python = "~3.12"
+Flask = "^3.0.3"
+gunicorn = "^22.0.0"
+Flask-SQLAlchemy = "^3.1.1"
+psycopg2-binary = "^2.9.9"
+Flask-Admin = "^1.6.1"
+Flask-Login = "^0.6.3"
+Werkzeug = "^3.0.3"
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^4.5.1"
+ruff = "^0.15.2"
+mypy = "^1.19.1"
+pytest = "^9.1.1"
+pytest-cov = "^7.1.0"
+
+[tool.pytest.ini_options]
+addopts = "--cov=app --cov-report=html --cov-report=xml"
+filterwarnings = ["ignore"]
+
+[tool.mypy]
+python_version = "3.12"
+incremental = false
+follow_imports = "silent"
+files = ["app"]
+ignore_missing_imports = true
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
