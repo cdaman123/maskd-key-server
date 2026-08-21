@@ -21,7 +21,7 @@ services:
       - FLASK_SECRET_KEY=dev-secret-key
       - ADMIN_USERNAME=admin
       - ADMIN_PASSWORD=admin123
-      - APP_SECRET=your-super-secret-app-secret
+      - APP_SECRET=default-dev-app-secret-do-not-use-in-prod
       - MODEL_DECRYPTION_KEY_B64=MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=
     depends_on:
       - db
