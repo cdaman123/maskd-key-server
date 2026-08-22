@@ -69,7 +69,6 @@ class SecuredAdminIndexView(AdminIndexView):
 admin = Admin(
     app,
     name="Maskd Key Server",
-    template_mode="bootstrap4",
     index_view=SecuredAdminIndexView(),
 )
 admin.add_view(SecuredModelView(ApiKey, db.session, name="API Keys"))
