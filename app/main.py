@@ -160,9 +160,9 @@ def get_model_key():
     return jsonify({"key": Config.MODEL_DECRYPTION_KEY_B64}), 200
 
 
-# Create DB tables before first request
-with app.app_context():
-    db.create_all()
+# Create DB tables before first request (disabled for production serverless)
+# with app.app_context():
+#    db.create_all()
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
