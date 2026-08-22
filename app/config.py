@@ -21,9 +21,10 @@ class Config:
     # Max allowed time difference for timestamp validation (seconds)
     MAX_TIMESTAMP_DRIFT = int(os.environ.get("MAX_TIMESTAMP_DRIFT", 30))
 
-    # PostgreSQL Configuration
+    # PostgreSQL Configuration (Accepts DATABASE_URL or SQLALCHEMY_DATABASE_URI)
     SQLALCHEMY_DATABASE_URI = os.environ.get(
-        "DATABASE_URL", "postgresql://maskd_user:maskd_pass@db:5432/maskd_keys"
+        "DATABASE_URL", 
+        os.environ.get("SQLALCHEMY_DATABASE_URI", "postgresql://maskd_user:maskd_pass@db:5432/maskd_keys")
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
